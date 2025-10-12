@@ -11,6 +11,8 @@ const UserModel = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
+      index:true // index is used for fast query 
     },
     password: {
       type: String,
@@ -20,7 +22,8 @@ const UserModel = new mongoose.Schema(
     accountType: {
       type: String,
       enum: ["admin", "student", "teacher"],
-      required: true,
+      required: true,  
+      index:true // index is used for fast query
     },
     additionalDetails: {
       type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +39,13 @@ const UserModel = new mongoose.Schema(
       type: String,
       required: true,
     },
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      
+    },
     courseProgress: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -45,6 +55,9 @@ const UserModel = new mongoose.Schema(
   },
   { minimize: true, timestamps: true }
 );
+
+UserModel.index({ email: 1 }, { unique: true });
+UserModel.index({accountType: 1});
 
 
 const User = mongoose.model("User", UserModel);
