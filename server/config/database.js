@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const DatabaseConnect = async () => {
   try {
     if (!process.env.MONGODB_URL) {
-      throw new Error("MONGODB_URL is not defined");
+      throw new Error('MONGODB_URL is not defined');
     }
 
     await mongoose.connect(process.env.MONGODB_URL, {
@@ -11,9 +11,9 @@ const DatabaseConnect = async () => {
       serverSelectionTimeoutMS: 5000,
     });
 
-    console.log("Database is connected Successfully");
+    console.log('Database is connected Successfully');
   } catch (error) {
-    console.error("Database connection failed");
+    console.error('Database connection failed');
     process.exit(1); // exit the process with a failure
   }
 };

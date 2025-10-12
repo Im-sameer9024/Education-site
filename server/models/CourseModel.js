@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const CourseModel = new mongoose.Schema(
   {
@@ -14,7 +14,7 @@ const CourseModel = new mongoose.Schema(
     },
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
     whatYouWillLearn: {
       type: String,
@@ -22,13 +22,13 @@ const CourseModel = new mongoose.Schema(
     courseContent: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Section",
+        ref: 'Section',
       },
     ],
     ratingAndReviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "RatingAndReview",
+        ref: 'RatingAndReview',
       },
     ],
     price: {
@@ -40,13 +40,13 @@ const CourseModel = new mongoose.Schema(
     },
     tag: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Tag",
+      ref: 'Tag',
     },
     studentsEnrolled: [
       {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "User",
+        ref: 'User',
       },
     ],
   },
@@ -56,6 +56,6 @@ const CourseModel = new mongoose.Schema(
   }
 );
 
-const Course = mongoose.model("Course", CourseModel);
+const Course = mongoose.model('Course', CourseModel);
 
 export default Course;

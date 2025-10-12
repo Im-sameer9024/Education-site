@@ -1,16 +1,16 @@
-import "dotenv/config.js";
-import Otp from "../models/OtpModel.js";
-import User from "../models/UserModel.js";
-import OtpGenerator from "otp-generator";
-import bcrypt from "bcrypt";
-import Profile from "../models/ProfileModel.js";
-import RefreshToken from "../models/RefreshTokenModel.js";
+import 'dotenv/config.js';
+import Otp from '../models/OtpModel.js';
+import User from '../models/UserModel.js';
+import OtpGenerator from 'otp-generator';
+import bcrypt from 'bcrypt';
+import Profile from '../models/ProfileModel.js';
+import RefreshToken from '../models/RefreshTokenModel.js';
 import {
   AccessTokenGenerator,
   RefreshTokenGenerator,
-} from "../services/TokenService.js";
-import mailSender from "../utils/mailSender.js";
-import { options } from "../constants/CookieConstants.js";
+} from '../services/TokenService.js';
+import mailSender from '../utils/mailSender.js';
+import { options } from '../constants/CookieConstants.js';
 
 //---------------send-Otp----------------
 
@@ -25,7 +25,7 @@ const SendOtp = async (req, res) => {
     if (checkUser) {
       return res.status(400).json({
         success: false,
-        message: "User Already Register",
+        message: 'User Already Register',
       });
     }
 
@@ -38,7 +38,7 @@ const SendOtp = async (req, res) => {
       digits: true,
     });
 
-    console.log("Otp generated", otp);
+    console.log('Otp generated', otp);
 
     //-----------check Unique otp -------------
 
@@ -49,7 +49,7 @@ const SendOtp = async (req, res) => {
     if (checkOtp) {
       return res.status(400).json({
         success: false,
-        message: "Try Again !",
+        message: 'Try Again !',
       });
     }
 
@@ -60,18 +60,18 @@ const SendOtp = async (req, res) => {
       otp: otp,
     });
 
-    console.log("otp body", savedOtp);
+    console.log('otp body', savedOtp);
 
     return res.status(200).json({
       success: true,
-      message: "Otp send successfully",
+      message: 'Otp send successfully',
       data: savedOtp,
     });
   } catch (error) {
-    console.log("Error occur in sendOtp controller", error);
+    console.log('Error occur in sendOtp controller', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };
@@ -103,14 +103,14 @@ const Signup = async (req, res) => {
     ) {
       return res.status(403).json({
         success: false,
-        message: "All fields are required",
+        message: 'All fields are required',
       });
     }
 
     if (password !== confirmPassword) {
       return res.status(403).json({
         success: false,
-        message: "Password and confirm password does not match",
+        message: 'Password and confirm password does not match',
       });
     }
 
@@ -121,7 +121,7 @@ const Signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "User Already Register",
+        message: 'User Already Register',
       });
     }
 
@@ -131,17 +131,17 @@ const Signup = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(1);
 
-    console.log("recent Otp", recentOtp);
+    console.log('recent Otp', recentOtp);
 
     if (recentOtp[0].otp !== otp) {
       return res.status(400).json({
         success: false,
-        message: "Invalid Otp",
+        message: 'Invalid Otp',
       });
     } else if (recentOtp[0].otp.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Otp Not found",
+        message: 'Otp Not found',
       });
     }
 
@@ -184,14 +184,14 @@ const Signup = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "User register successfully",
+      message: 'User register successfully',
       data: user,
     });
   } catch (error) {
-    console.log("Error occur in signup controller", error);
+    console.log('Error occur in signup controller', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
       error: error,
     });
   }
@@ -206,7 +206,7 @@ const Login = async (req, res) => {
     if (!email || !password) {
       return res.status(403).json({
         success: false,
-        message: "All fields are required",
+        message: 'All fields are required',
       });
     }
 
@@ -215,7 +215,7 @@ const Login = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
       });
     }
 
@@ -228,9 +228,9 @@ const Login = async (req, res) => {
       if (await RefreshToken.find({ user: user._id })) {
         const accessToken = AccessTokenGenerator(payload);
 
-        return res.cookie("token", accessToken, options).json({
+        return res.cookie('token', accessToken, options).json({
           success: true,
-          message: "Login successfully",
+          message: 'Login successfully',
           data: user,
         });
       } else {
@@ -242,23 +242,23 @@ const Login = async (req, res) => {
           user: user._id,
         });
 
-        return res.cookie("token", accessToken, options).json({
+        return res.cookie('token', accessToken, options).json({
           success: true,
-          message: "Login successfully",
+          message: 'Login successfully',
           data: user,
         });
       }
     } else {
       return res.status(401).json({
         success: false,
-        message: "Invalid password",
+        message: 'Invalid password',
       });
     }
   } catch (error) {
-    console.log("Error occur in Login controller", error);
+    console.log('Error occur in Login controller', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };
@@ -272,14 +272,14 @@ const ChangePassword = async (req, res) => {
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(403).json({
         success: false,
-        message: "All fields are required",
+        message: 'All fields are required',
       });
     }
 
     if (newPassword !== confirmPassword) {
       return res.status(403).json({
         success: false,
-        message: "Password and confirm password does not match",
+        message: 'Password and confirm password does not match',
       });
     }
 
@@ -290,7 +290,7 @@ const ChangePassword = async (req, res) => {
     if (!user) {
       return res.status(403).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
       });
     }
 
@@ -302,19 +302,19 @@ const ChangePassword = async (req, res) => {
 
     await mailSender(
       user.email,
-      "Password Changed Successfully",
-      "Password Changed Successfully"
+      'Password Changed Successfully',
+      'Password Changed Successfully'
     );
 
     return res.status(200).json({
       success: true,
-      message: "Password changed successfully",
+      message: 'Password changed successfully',
     });
   } catch (error) {
-    console.log("Error occur in change password controller", error);
+    console.log('Error occur in change password controller', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };
@@ -337,21 +337,21 @@ const refreshAccessToken = async (req, res) => {
     if (!refreshToken) {
       return res.status(403).json({
         success: false,
-        message: "Refresh token not found , please login again",
+        message: 'Refresh token not found , please login again',
       });
     }
 
     const accessToken = AccessTokenGenerator(payload);
 
-    return res.cookie("token", accessToken, options).status(200).json({
+    return res.cookie('token', accessToken, options).status(200).json({
       success: true,
-      message: "Refresh User successfully by token",
+      message: 'Refresh User successfully by token',
     });
   } catch (error) {
-    console.log("Error occur in refresh token controller", error);
+    console.log('Error occur in refresh token controller', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
       error: error,
     });
   }
@@ -365,17 +365,17 @@ const Logout = async (req, res) => {
 
     await RefreshToken.findOneAndDelete({ userId: id });
 
-    res.clearCookie("token", options);
+    res.clearCookie('token', options);
 
     return res.status(200).json({
       success: true,
-      message: "Logout successfully",
+      message: 'Logout successfully',
     });
   } catch (error) {
-    console.log("Error occur in Logout", error);
+    console.log('Error occur in Logout', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };

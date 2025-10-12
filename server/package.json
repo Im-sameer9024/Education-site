@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "clear": "rm -rf dist"
+    "clear": "rm -rf dist",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -23,5 +25,8 @@
     "nodemon": "^3.1.10",
     "otp-generator": "^4.0.1",
     "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   }
 }

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const UserModel = new mongoose.Schema(
   {
@@ -12,7 +12,7 @@ const UserModel = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      index:true // index is used for fast query 
+      index: true, // index is used for fast query
     },
     password: {
       type: String,
@@ -21,18 +21,18 @@ const UserModel = new mongoose.Schema(
     },
     accountType: {
       type: String,
-      enum: ["admin", "student", "teacher"],
-      required: true,  
-      index:true // index is used for fast query
+      enum: ['admin', 'student', 'teacher'],
+      required: true,
+      index: true, // index is used for fast query
     },
     additionalDetails: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Profile",
+      ref: 'Profile',
     },
     courses: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
+        ref: 'Course',
       },
     ],
     image: {
@@ -44,12 +44,11 @@ const UserModel = new mongoose.Schema(
     },
     resetPasswordExpires: {
       type: Date,
-      
     },
     courseProgress: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "CourseProgress",
+        ref: 'CourseProgress',
       },
     ],
   },
@@ -57,8 +56,7 @@ const UserModel = new mongoose.Schema(
 );
 
 UserModel.index({ email: 1 }, { unique: true });
-UserModel.index({accountType: 1});
+UserModel.index({ accountType: 1 });
 
-
-const User = mongoose.model("User", UserModel);
+const User = mongoose.model('User', UserModel);
 export default User;

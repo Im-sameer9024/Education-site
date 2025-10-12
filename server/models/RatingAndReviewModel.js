@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const RatingAndReviewModel = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: 'User',
   },
   rating: {
     type: Number,
@@ -17,6 +17,6 @@ const RatingAndReviewModel = new mongoose.Schema({
   },
 });
 
-const RatingAndReview = mongoose.model("RatingAndReview", RatingAndReviewModel);
+const RatingAndReview = mongoose.model('RatingAndReview', RatingAndReviewModel);
 
 export default RatingAndReview;

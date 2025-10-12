@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const SectionModel = new mongoose.Schema({
   sectionName: {
@@ -10,10 +10,10 @@ const SectionModel = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "SubSection",
+      ref: 'SubSection',
     },
   ],
 });
 
-const Section = mongoose.model("Section", SectionModel);
+const Section = mongoose.model('Section', SectionModel);
 export default Section;

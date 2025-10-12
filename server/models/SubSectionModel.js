@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const SubSectionModel = new mongoose.Schema(
   {
@@ -23,6 +23,6 @@ const SubSectionModel = new mongoose.Schema(
   }
 );
 
-const SubSection = mongoose.model("SubSection", SubSectionModel);
+const SubSection = mongoose.model('SubSection', SubSectionModel);
 
 export default SubSection;

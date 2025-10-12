@@ -1,5 +1,5 @@
-import "dotenv/config.js";
-import JWT from "jsonwebtoken";
+import 'dotenv/config.js';
+import JWT from 'jsonwebtoken';
 
 const auth = async (req, res, next) => {
   try {
@@ -7,26 +7,26 @@ const auth = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Token is missing",
+        message: 'Token is missing',
       });
     }
 
     try {
       const decoded = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
       req.user = decoded;
-      console.log("decoded token is here", decoded);
+      console.log('decoded token is here', decoded);
     } catch (error) {
       return res.status(401).json({
         success: false,
-        message: "Token is invalid",
+        message: 'Token is invalid',
       });
     }
     next();
   } catch (error) {
-    console.log("error in auth middleware", error);
+    console.log('error in auth middleware', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };
@@ -35,43 +35,42 @@ const auth = async (req, res, next) => {
 
 const isStudent = async (req, res, next) => {
   try {
-    if (req.user.role !== "student") {
+    if (req.user.role !== 'student') {
       return res.status(401).json({
         success: false,
-        message: "This route is only accessible by student",
+        message: 'This route is only accessible by student',
       });
     }
 
     next();
   } catch (error) {
-    console.log("Error in student middleware", error);
+    console.log('Error in student middleware', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };
-
 
 //----------- teacher role ----------------
 
 const isTeacher = async (req, res, next) => {
   try {
-    if (req.user.role !== "teacher") {
+    if (req.user.role !== 'teacher') {
       return res.status(401).json({
         success: false,
-        message: "This route is only accessible by teacher",
+        message: 'This route is only accessible by teacher',
       });
     }
 
     next();
   } catch (error) {
-    console.log("Error in teacher middleware", error);
+    console.log('Error in teacher middleware', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: 'Internal server error',
     });
   }
 };

@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer";
-import "dotenv/config.js";
+import nodemailer from 'nodemailer';
+import 'dotenv/config.js';
 
 const mailSender = async (email, title, body) => {
   try {
@@ -12,7 +12,7 @@ const mailSender = async (email, title, body) => {
     });
 
     const info = transporter.sendMail({
-      from: " StudyNotion Education Site ",
+      from: ' StudyNotion Education Site ',
       to: email,
       subject: title,
       html: body,
@@ -20,7 +20,7 @@ const mailSender = async (email, title, body) => {
 
     return info;
   } catch (error) {
-    console.log("Error occur in mailSender function", error);
+    console.log('Error occur in mailSender function', error);
   }
 };
 
