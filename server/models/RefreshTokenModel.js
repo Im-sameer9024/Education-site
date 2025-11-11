@@ -10,7 +10,6 @@ const RefreshTokenModel = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    index: true,
   },
   createdAt: {
     type: Date,

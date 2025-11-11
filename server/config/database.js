@@ -1,15 +1,12 @@
 import mongoose from 'mongoose';
-
+import 'dotenv/config.js';
 const DatabaseConnect = async () => {
   try {
     if (!process.env.MONGODB_URL) {
       throw new Error('MONGODB_URL is not defined');
     }
 
-    await mongoose.connect(process.env.MONGODB_URL, {
-      autoIndex: true, //true for development false for production
-      serverSelectionTimeoutMS: 5000,
-    });
+    await mongoose.connect(process.env.MONGODB_URL);
 
     console.log('Database is connected Successfully');
   } catch (error) {

@@ -15,6 +15,11 @@ const RatingAndReviewModel = new mongoose.Schema({
     trim: true,
     required: true,
   },
+  course:{
+    type:mongoose.Schema.Types.ObjectId,
+    required:true,
+    ref:'Course',
+  }
 });
 
 const RatingAndReview = mongoose.model('RatingAndReview', RatingAndReviewModel);

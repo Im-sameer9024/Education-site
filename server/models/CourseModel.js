@@ -49,6 +49,13 @@ const CourseModel = new mongoose.Schema(
         ref: 'User',
       },
     ],
+    instructions:{
+      type:[String],
+    },
+    status:{
+      type:String,
+      enum:['draft','published','archived'],
+    }
   },
   {
     minimize: true,

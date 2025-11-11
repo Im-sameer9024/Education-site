@@ -7,12 +7,17 @@ const UserModel = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    lastName:{
+      type: String,
+      required: true,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,
       trim: true,
       unique: true,
-      index: true, // index is used for fast query
+      index:true,
     },
     password: {
       type: String,
@@ -23,7 +28,15 @@ const UserModel = new mongoose.Schema(
       type: String,
       enum: ['admin', 'student', 'teacher'],
       required: true,
-      index: true, // index is used for fast query
+      index:true, // for faster query
+    },
+    active:{
+      type: Boolean,
+      default:true
+    },
+    approved:{
+      type: Boolean,
+      default:false
     },
     additionalDetails: {
       type: mongoose.Schema.Types.ObjectId,
@@ -55,8 +68,6 @@ const UserModel = new mongoose.Schema(
   { minimize: true, timestamps: true }
 );
 
-UserModel.index({ email: 1 }, { unique: true });
-UserModel.index({ accountType: 1 });
 
 const User = mongoose.model('User', UserModel);
 export default User;

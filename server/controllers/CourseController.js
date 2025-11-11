@@ -136,4 +136,44 @@ const getAllCourses = async (req, res) => {
   }
 };
 
-export { createCourse, getAllCourses };
+const getCourseDetails = async(req,res) =>{
+  try {
+
+    const{courseId} = req.body;
+
+    const courseDetails = await Course.find({_id:courseId}).populate('category').populate({
+      path:'teacher',
+      populate:{
+        path:'additionalDetails'
+      }
+    }).populate('category').populate({
+      path:'courseContent',
+      populate:{
+        path:'subSection'
+      }
+    }).populate('ratingAndReviews').populate('studentsEnrolled').exec()
+
+    if(!courseDetails){
+      return res.status(404).json({
+        success:false,
+        message:'Course not found'
+      })
+    }
+
+    return res.status(200).json({
+      success:true,
+      message:'Course details fetched successfully',
+      data:courseDetails
+    })
+    
+  } catch (error) {
+    console.log('Error occur in getCourseDetails controller', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+    
+  }
+}
+
+export { createCourse, getAllCourses,getCourseDetails };

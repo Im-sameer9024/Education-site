@@ -18,6 +18,13 @@ const SendOtp = async (req, res) => {
   try {
     const { email } = req.body;
 
+    if (!email) {
+      return res.status(403).json({
+        success: false,
+        message: 'Email is required',
+      });
+    }
+
     //------------- check user already exist -------------
 
     const checkUser = await User.findOne({ email });
@@ -38,8 +45,6 @@ const SendOtp = async (req, res) => {
       digits: true,
     });
 
-    console.log('Otp generated', otp);
-
     //-----------check Unique otp -------------
 
     const checkOtp = await Otp.findOne({
@@ -59,8 +64,6 @@ const SendOtp = async (req, res) => {
       email: email,
       otp: otp,
     });
-
-    console.log('otp body', savedOtp);
 
     return res.status(200).json({
       success: true,
@@ -170,18 +173,6 @@ const Signup = async (req, res) => {
       image: avatarUrl,
     });
 
-    const payload = {
-      id: user._id,
-      role: user.accountType,
-    };
-
-    const refreshToken = RefreshTokenGenerator(payload);
-
-    await RefreshToken.create({
-      token: refreshToken,
-      user: user._id,
-    });
-
     return res.status(200).json({
       success: true,
       message: 'User register successfully',
@@ -222,32 +213,18 @@ const Login = async (req, res) => {
     const payload = {
       id: user._id,
       role: user.accountType,
+      email: user.email,
     };
 
     if (await bcrypt.compare(password, user.password)) {
-      if (await RefreshToken.find({ user: user._id })) {
-        const accessToken = AccessTokenGenerator(payload);
+      const Token = AccessTokenGenerator(payload);
 
-        return res.cookie('token', accessToken, options).json({
-          success: true,
-          message: 'Login successfully',
-          data: user,
-        });
-      } else {
-        const refreshToken = RefreshTokenGenerator(payload);
-        const accessToken = AccessTokenGenerator(payload);
-
-        await RefreshToken.create({
-          token: refreshToken,
-          user: user._id,
-        });
-
-        return res.cookie('token', accessToken, options).json({
-          success: true,
-          message: 'Login successfully',
-          data: user,
-        });
-      }
+      return res.cookie('token', Token, options).status(200).json({
+        success: true,
+        message: 'Login successfully',
+        data: user,
+        token: Token,
+      });
     } else {
       return res.status(401).json({
         success: false,
@@ -319,44 +296,6 @@ const ChangePassword = async (req, res) => {
   }
 };
 
-//------------Refresh User by Token ---------------
-
-const refreshAccessToken = async (req, res) => {
-  try {
-    const { id, role } = req.user;
-
-    const payload = {
-      id: id,
-      role: role,
-    };
-
-    //------- check refresh token--------
-
-    const refreshToken = await RefreshToken.findOne({ userId: id });
-
-    if (!refreshToken) {
-      return res.status(403).json({
-        success: false,
-        message: 'Refresh token not found , please login again',
-      });
-    }
-
-    const accessToken = AccessTokenGenerator(payload);
-
-    return res.cookie('token', accessToken, options).status(200).json({
-      success: true,
-      message: 'Refresh User successfully by token',
-    });
-  } catch (error) {
-    console.log('Error occur in refresh token controller', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error,
-    });
-  }
-};
-
 //------------Logout ----------------
 
 const Logout = async (req, res) => {
@@ -380,4 +319,4 @@ const Logout = async (req, res) => {
   }
 };
 
-export { SendOtp, Signup, Login, ChangePassword, refreshAccessToken, Logout };
+export { SendOtp, Signup, Login, ChangePassword, Logout };
